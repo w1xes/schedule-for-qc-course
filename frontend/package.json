@@ -68,6 +68,7 @@
         "@material-ui/icons": "4.11.2",
         "@stryker-mutator/core": "^9.5.1",
         "@stryker-mutator/jest-runner": "^9.5.1",
+        "babel-jest": "^27.5.1",
         "cheerio": "^1.0.0-rc.12",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^4.1.0",
@@ -76,6 +77,8 @@
         "eslint-plugin-prettier": "^3.0.0",
         "eslint-plugin-react": "^7.37.4",
         "eslint-plugin-sonarjs": "^3.0.1",
+        "jest": "^27.5.1",
+        "jest-environment-jsdom": "^27.5.1",
         "prettier": "^2.4.1"
     }
 }

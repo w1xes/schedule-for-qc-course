@@ -172,9 +172,19 @@ dependencies {
 
 
 pitest {
-    targetClasses = ['com.softserve.service.*']
-    targetTests = ['com.softserve.service.*Test']
+    // Варіант 2: тестуємо TeacherService та SubjectService
+    targetClasses = [
+        'com.softserve.service.impl.TeacherServiceImpl',
+        'com.softserve.service.impl.SubjectServiceImpl'
+    ]
+    targetTests = [
+        'com.softserve.service.TeacherServiceTest',
+        'com.softserve.service.SubjectServiceTest'
+    ]
     junit5PluginVersion = '1.2.1'
-    outputFormats = ['HTML']
+    outputFormats = ['HTML', 'XML']
     timestampedReports = false
+    mutators = ['DEFAULTS']
+    threads = 4
+    timeoutConstInMillis = 10000
 }
