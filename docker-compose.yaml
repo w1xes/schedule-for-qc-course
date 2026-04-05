@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       DB_URL: ${DB_URL:-jdbc:postgresql://postgres:5432/appdb}
       DB_USER: ${DB_USER:-postgres}
@@ -12,9 +12,9 @@ services:
       JWT_EXPIRED: ${JWT_EXPIRED:-24h}
       LIQUIBASE_ENABLED: ${LIQUIBASE_ENABLED:-true}
       REDIS_URL: redis://redis:6379
-      BACKEND_URL: ${BACKEND_URL:-http://localhost:8080}
+      BACKEND_URL: ${BACKEND_URL:-http://localhost:8081}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
-      PORT: 8080
+      PORT: 8081
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-disabled}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-disabled}
       FACEBOOK_CLIENT_ID: ${FACEBOOK_CLIENT_ID:-disabled}

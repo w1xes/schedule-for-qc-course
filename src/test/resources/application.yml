@@ -53,7 +53,7 @@ app:
       secret: ${JWT_SECRET:jwttoken}
       expired: ${JWT_EXPIRED:24h}
   backend:
-    url: ${BACKEND_URL:http://localhost:8080/}
+    url: ${BACKEND_URL:http://localhost:8081/}
   cors:
     allowed-origins: ${CORS_ORIGINS:http://localhost:3000}
 
