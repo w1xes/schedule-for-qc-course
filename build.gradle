@@ -172,19 +172,30 @@ dependencies {
 
 
 pitest {
-    // Варіант 2: тестуємо TeacherService та SubjectService
+    // Варіант 3: тестуємо DepartmentServiceImpl та RoomServiceImpl
     targetClasses = [
-        'com.softserve.service.impl.TeacherServiceImpl',
-        'com.softserve.service.impl.SubjectServiceImpl'
+        'com.softserve.service.impl.DepartmentServiceImpl',
+        'com.softserve.service.impl.RoomServiceImpl'
     ]
     targetTests = [
-        'com.softserve.service.TeacherServiceTest',
-        'com.softserve.service.SubjectServiceTest'
+        'com.softserve.service.DepartmentServiceTest',
+        'com.softserve.service.RoomServiceTest'
     ]
+    pitestVersion = '1.17.0'
     junit5PluginVersion = '1.2.1'
     outputFormats = ['HTML', 'XML']
     timestampedReports = false
     mutators = ['DEFAULTS']
     threads = 4
     timeoutConstInMillis = 10000
+}
+
+// Wire pitest subprocess to the Java 21 toolchain using the lazy Provider API.
+// .get() inside pitest{} resolves at configuration time before the toolchain is
+// provisioned; .map{} defers resolution to task-execution time when JDK 21 is ready.
+tasks.withType(info.solidsoft.gradle.pitest.PitestTask).configureEach {
+    jvmPath.set(
+        javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+            .map { it.executablePath.asFile.absolutePath }
+    )
 }

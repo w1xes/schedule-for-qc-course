@@ -4,7 +4,10 @@ const config = {
     jest: {
         configFile: "jest.config.js",
         config: {
-            testMatch: ["**/src/helper/**/*.test.js"],
+            testMatch: [
+                "**/src/helper/**/*.test.js",
+                "**/src/utils/**/*.test.js"
+            ],
             testPathIgnorePatterns: ["setLink"],
             coverageThreshold: undefined
         }
@@ -13,7 +16,12 @@ const config = {
         plugins: [],
         excludedMutations: []
     },
-    mutate: ["src/helper/*.js", "!src/helper/*.test.js", "!src/helper/setLInk.js"],
+    mutate: [
+        "src/helper/getHref.js",
+        "src/utils/sheduleUtils.js",
+        "!src/helper/*.test.js",
+        "!src/utils/*.test.js"
+    ],
     reporters: ["html", "clear-text", "progress"],
     htmlReporter: {
         fileName: "reports/mutation/mutation.html"

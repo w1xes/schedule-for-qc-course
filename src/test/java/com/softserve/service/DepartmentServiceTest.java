@@ -11,6 +11,7 @@ import com.softserve.mapper.TeacherMapper;
 import com.softserve.repository.DepartmentRepository;
 import com.softserve.service.impl.DepartmentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,164 +59,240 @@ class DepartmentServiceTest {
         departmentDTO.setName("some department");
     }
 
-    @Test
-    void testGetAll() {
-        List<Department> departments = Collections.singletonList(department);
-        List<DepartmentDTO> expected = Collections.singletonList(departmentDTO);
+    // =========================================================
+    @Nested
+    class GetByIdTests {
 
-        when(repository.getAll()).thenReturn(departments);
-        when(departmentMapper.departmentsToDepartmentDTOs(departments)).thenReturn(expected);
+        @Test
+        void testGetById_happyPath() {
+            // Arrange
+            when(repository.findById(1L)).thenReturn(Optional.of(department));
+            when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+            // Act
+            DepartmentDTO actual = service.getById(1L);
+            // Assert
+            assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
+            verify(repository).findById(1L);
+            verify(departmentMapper).departmentToDepartmentDTO(department);
+        }
 
-        List<DepartmentDTO> actual = service.getAll();
-
-        assertThat(actual).hasSameSizeAs(expected).hasSameElementsAs(expected);
-        verify(repository).getAll();
-        verify(departmentMapper).departmentsToDepartmentDTOs(departments);
+        @Test
+        void testGetById_throwsEntityNotFoundException_whenNotFound() {
+            // Arrange
+            Long nonExistentId = 2L;
+            when(repository.findById(nonExistentId)).thenReturn(Optional.empty());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> service.getById(nonExistentId));
+            verify(repository).findById(nonExistentId);
+        }
     }
 
-    @Test
-    void testGetDisabled() {
-        List<Department> departments = Collections.singletonList(department);
-        List<DepartmentDTO> expected = Collections.singletonList(departmentDTO);
+    // =========================================================
+    @Nested
+    class GetAllTests {
 
-        when(repository.getDisabled()).thenReturn(departments);
-        when(departmentMapper.departmentsToDepartmentDTOs(departments)).thenReturn(expected);
+        @Test
+        void testGetAll_returnsList() {
+            // Arrange
+            List<Department> departments = Collections.singletonList(department);
+            List<DepartmentDTO> expected = Collections.singletonList(departmentDTO);
+            when(repository.getAll()).thenReturn(departments);
+            when(departmentMapper.departmentsToDepartmentDTOs(departments)).thenReturn(expected);
+            // Act
+            List<DepartmentDTO> actual = service.getAll();
+            // Assert
+            assertThat(actual).hasSameSizeAs(expected).hasSameElementsAs(expected);
+            verify(repository).getAll();
+            verify(departmentMapper).departmentsToDepartmentDTOs(departments);
+        }
 
-        List<DepartmentDTO> actual = service.getDisabled();
-
-        assertThat(actual).hasSameSizeAs(expected).hasSameElementsAs(expected);
-        verify(repository).getDisabled();
-        verify(departmentMapper).departmentsToDepartmentDTOs(departments);
+        @Test
+        void testGetAll_returnsEmptyList_whenNoDepartments() {
+            // Arrange
+            when(repository.getAll()).thenReturn(Collections.emptyList());
+            when(departmentMapper.departmentsToDepartmentDTOs(Collections.emptyList()))
+                    .thenReturn(Collections.emptyList());
+            // Act
+            List<DepartmentDTO> actual = service.getAll();
+            // Assert
+            assertThat(actual).isEmpty();
+        }
     }
 
-    @Test
-    void testDelete() {
-        when(repository.findById(1L)).thenReturn(Optional.of(department));
-        when(repository.delete(department)).thenReturn(department);
-        when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+    // =========================================================
+    @Nested
+    class GetDisabledTests {
 
-        DepartmentDTO actual = service.delete(1L);
-
-        assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
-        verify(repository).findById(1L);
-        verify(repository).delete(department);
-        verify(departmentMapper).departmentToDepartmentDTO(department);
+        @Test
+        void testGetDisabled_returnsList() {
+            // Arrange
+            List<Department> departments = Collections.singletonList(department);
+            List<DepartmentDTO> expected = Collections.singletonList(departmentDTO);
+            when(repository.getDisabled()).thenReturn(departments);
+            when(departmentMapper.departmentsToDepartmentDTOs(departments)).thenReturn(expected);
+            // Act
+            List<DepartmentDTO> actual = service.getDisabled();
+            // Assert
+            assertThat(actual).hasSameSizeAs(expected).hasSameElementsAs(expected);
+            verify(repository).getDisabled();
+            verify(departmentMapper).departmentsToDepartmentDTOs(departments);
+        }
     }
 
-    @Test
-    void testGetById() {
-        when(repository.findById(1L)).thenReturn(Optional.of(department));
-        when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+    // =========================================================
+    @Nested
+    class SaveTests {
 
-        DepartmentDTO actual = service.getById(1L);
+        @Test
+        void testSave_happyPath() {
+            // Arrange
+            when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
+            when(repository.isExistsByName(department.getName())).thenReturn(false);
+            when(repository.save(department)).thenReturn(department);
+            when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+            // Act
+            DepartmentDTO actual = service.save(departmentDTO);
+            // Assert
+            assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
+            verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
+            verify(repository).isExistsByName(department.getName());
+            verify(repository).save(department);
+            verify(departmentMapper).departmentToDepartmentDTO(department);
+        }
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
-        verify(repository).findById(1L);
-        verify(departmentMapper).departmentToDepartmentDTO(department);
+        @Test
+        void testSave_throwsFieldAlreadyExistsException_whenNameDuplicated() {
+            // Arrange
+            when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
+            when(repository.isExistsByName(department.getName())).thenReturn(true);
+            // Act & Assert
+            assertThrows(FieldAlreadyExistsException.class, () -> service.save(departmentDTO));
+            verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
+            verify(repository).isExistsByName(department.getName());
+            verify(repository, never()).save(any());
+        }
     }
 
-    @Test
-    void throwEntityNotFoundExceptionIfDepartmentNotFoundedById() {
-        Long nonExistentId = 2L;
-        when(repository.findById(nonExistentId)).thenReturn(Optional.empty());
+    // =========================================================
+    @Nested
+    class UpdateTests {
 
-        assertThrows(EntityNotFoundException.class, () -> service.getById(nonExistentId));
-        verify(repository).findById(nonExistentId);
+        @Test
+        void testUpdate_happyPath() {
+            // Arrange
+            when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
+            when(repository.isExistsByNameIgnoringId(department.getName(), department.getId())).thenReturn(false);
+            when(repository.update(department)).thenReturn(department);
+            when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+            // Act
+            DepartmentDTO actual = service.update(departmentDTO);
+            // Assert
+            assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
+            verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
+            verify(repository).isExistsByNameIgnoringId(department.getName(), department.getId());
+            verify(repository).update(department);
+            verify(departmentMapper).departmentToDepartmentDTO(department);
+        }
+
+        @Test
+        void testUpdate_throwsFieldAlreadyExistsException_whenNameDuplicated() {
+            // Arrange
+            when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
+            when(repository.isExistsByNameIgnoringId(department.getName(), department.getId())).thenReturn(true);
+            // Act & Assert
+            assertThrows(FieldAlreadyExistsException.class, () -> service.update(departmentDTO));
+            verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
+            verify(repository).isExistsByNameIgnoringId(department.getName(), department.getId());
+            verify(repository, never()).update(any());
+        }
     }
 
-    @Test
-    void testSave() {
-        when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
-        when(repository.isExistsByName(department.getName())).thenReturn(false);
-        when(repository.save(department)).thenReturn(department);
-        when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+    // =========================================================
+    @Nested
+    class DeleteTests {
 
-        DepartmentDTO actual = service.save(departmentDTO);
+        @Test
+        void testDelete_happyPath() {
+            // Arrange
+            when(repository.findById(1L)).thenReturn(Optional.of(department));
+            when(repository.delete(department)).thenReturn(department);
+            when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+            // Act
+            DepartmentDTO actual = service.delete(1L);
+            // Assert
+            assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
+            verify(repository).findById(1L);
+            verify(repository).delete(department);
+            verify(departmentMapper).departmentToDepartmentDTO(department);
+        }
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
-        verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
-        verify(repository).isExistsByName(department.getName());
-        verify(repository).save(department);
-        verify(departmentMapper).departmentToDepartmentDTO(department);
+        @Test
+        void testDelete_throwsEntityNotFoundException_whenNotFound() {
+            // Arrange
+            Long nonExistentId = 99L;
+            when(repository.findById(nonExistentId)).thenReturn(Optional.empty());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> service.delete(nonExistentId));
+            verify(repository).findById(nonExistentId);
+            verify(repository, never()).delete(any());
+        }
     }
 
-    @Test
-    void throwFieldAlreadyExistsExceptionForNameOnSave() {
-        when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
-        when(repository.isExistsByName(department.getName())).thenReturn(true);
+    // =========================================================
+    @Nested
+    class GetAllTeachersTests {
 
-        assertThrows(FieldAlreadyExistsException.class, () -> service.save(departmentDTO));
+        @Test
+        void testGetAllTeachers_returnsList() {
+            // Arrange
+            Teacher firstTeacher = new Teacher();
+            firstTeacher.setName("Myroniuk");
+            firstTeacher.setSurname("Ihor");
+            firstTeacher.setPatronymic("Stepanovych");
+            firstTeacher.setPosition("professor");
 
-        verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
-        verify(repository).isExistsByName(department.getName());
-        verify(repository, never()).save(any());
-    }
+            Teacher secondTeacher = new Teacher();
+            secondTeacher.setName("Adamovych");
+            secondTeacher.setSurname("Svitlana");
+            secondTeacher.setPatronymic("Petrivna");
+            secondTeacher.setPosition("docent");
 
-    @Test
-    void testUpdate() {
-        when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
-        when(repository.isExistsByNameIgnoringId(department.getName(), department.getId())).thenReturn(false);
-        when(repository.update(department)).thenReturn(department);
-        when(departmentMapper.departmentToDepartmentDTO(department)).thenReturn(departmentDTO);
+            List<Teacher> teachers = Arrays.asList(firstTeacher, secondTeacher);
 
-        DepartmentDTO actual = service.update(departmentDTO);
+            TeacherDTO firstTeacherDTO = new TeacherDTO();
+            firstTeacherDTO.setName("Myroniuk");
+            firstTeacherDTO.setSurname("Ihor");
+            firstTeacherDTO.setPatronymic("Stepanovych");
+            firstTeacherDTO.setPosition("professor");
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(departmentDTO);
-        verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
-        verify(repository).isExistsByNameIgnoringId(department.getName(), department.getId());
-        verify(repository).update(department);
-        verify(departmentMapper).departmentToDepartmentDTO(department);
-    }
+            TeacherDTO secondTeacherDTO = new TeacherDTO();
+            secondTeacherDTO.setName("Adamovych");
+            secondTeacherDTO.setSurname("Svitlana");
+            secondTeacherDTO.setPatronymic("Petrivna");
+            secondTeacherDTO.setPosition("docent");
 
-    @Test
-    void throwFieldAlreadyExistsExceptionForNameOnUpdate() {
-        when(departmentMapper.departmentDTOToDepartment(departmentDTO)).thenReturn(department);
-        when(repository.isExistsByNameIgnoringId(department.getName(), department.getId())).thenReturn(true);
+            List<TeacherDTO> expected = Arrays.asList(firstTeacherDTO, secondTeacherDTO);
 
-        assertThrows(FieldAlreadyExistsException.class, () -> service.update(departmentDTO));
+            when(repository.getAllTeachers(3L)).thenReturn(teachers);
+            when(teacherMapper.teachersToTeacherDTOs(teachers)).thenReturn(expected);
+            // Act
+            List<TeacherDTO> actual = service.getAllTeachers(3L);
+            // Assert
+            assertThat(actual).hasSameSizeAs(expected).hasSameElementsAs(expected);
+            verify(repository).getAllTeachers(3L);
+            verify(teacherMapper).teachersToTeacherDTOs(teachers);
+        }
 
-        verify(departmentMapper).departmentDTOToDepartment(departmentDTO);
-        verify(repository).isExistsByNameIgnoringId(department.getName(), department.getId());
-        verify(repository, never()).update(any());
-    }
-
-    @Test
-    void testGetAllTeachers() {
-        Teacher firstTeacher = new Teacher();
-        firstTeacher.setName("Myroniuk");
-        firstTeacher.setSurname("Ihor");
-        firstTeacher.setPatronymic("Stepanovych");
-        firstTeacher.setPosition("professor");
-
-        Teacher secondTeacher = new Teacher();
-        secondTeacher.setName("Adamovych");
-        secondTeacher.setSurname("Svitlana");
-        secondTeacher.setPatronymic("Petrivna");
-        secondTeacher.setPosition("docent");
-
-        List<Teacher> teachers = Arrays.asList(firstTeacher, secondTeacher);
-
-        TeacherDTO firstTeacherDTO = new TeacherDTO();
-        firstTeacherDTO.setName("Myroniuk");
-        firstTeacherDTO.setSurname("Ihor");
-        firstTeacherDTO.setPatronymic("Stepanovych");
-        firstTeacherDTO.setPosition("professor");
-
-        TeacherDTO secondTeacherDTO = new TeacherDTO();
-        secondTeacherDTO.setName("Adamovych");
-        secondTeacherDTO.setSurname("Svitlana");
-        secondTeacherDTO.setPatronymic("Petrivna");
-        secondTeacherDTO.setPosition("docent");
-
-        List<TeacherDTO> expected = Arrays.asList(firstTeacherDTO, secondTeacherDTO);
-
-        when(repository.getAllTeachers(3L)).thenReturn(teachers);
-        when(teacherMapper.teachersToTeacherDTOs(teachers)).thenReturn(expected);
-
-        List<TeacherDTO> actual = service.getAllTeachers(3L);
-
-        assertThat(actual).hasSameSizeAs(expected).hasSameElementsAs(expected);
-        verify(repository).getAllTeachers(3L);
-        verify(teacherMapper).teachersToTeacherDTOs(teachers);
+        @Test
+        void testGetAllTeachers_returnsEmptyList_whenDepartmentHasNoTeachers() {
+            // Arrange
+            when(repository.getAllTeachers(1L)).thenReturn(Collections.emptyList());
+            when(teacherMapper.teachersToTeacherDTOs(Collections.emptyList())).thenReturn(Collections.emptyList());
+            // Act
+            List<TeacherDTO> actual = service.getAllTeachers(1L);
+            // Assert
+            assertThat(actual).isEmpty();
+            verify(repository).getAllTeachers(1L);
+        }
     }
 }
