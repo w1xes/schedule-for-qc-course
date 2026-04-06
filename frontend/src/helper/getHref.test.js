@@ -2,6 +2,11 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { getHref } from './getHref';
 
+// Prevent i18next-http-backend from making XHR requests in jsdom.
+// setupTests.js converts console.error → thrown Error, so any async
+// i18next failure would crash tests that finish before the XHR settles.
+jest.mock('../i18n', () => ({ t: (key) => key }));
+
 describe('getHref function', () => {
     describe('happy path — valid link', () => {
         it('should render an anchor element with correct href', () => {
