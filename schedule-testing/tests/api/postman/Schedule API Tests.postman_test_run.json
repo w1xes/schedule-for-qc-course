@@ -1,0 +1,653 @@
+{
+	"id": "7463266b-07df-48b8-8ad6-97f6b7ea3b38",
+	"name": "Schedule API Tests",
+	"timestamp": "2026-04-26T12:56:23.473Z",
+	"collection_id": "53969157-3428ca01-43c0-4a88-8f25-6fa5622bf6ed",
+	"folder_id": 0,
+	"environment_id": "53969157-09eedbdd-f069-4925-bcce-8c10c91a7cf2",
+	"totalPass": 30,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-04-26T12:56:21.527Z",
+	"totalFail": 17,
+	"results": [
+		{
+			"id": "202290ad-db51-472a-9414-ebb87e8fa5e4",
+			"name": "POST Sign In",
+			"url": "http://localhost:8081/auth/sign-in",
+			"time": 85,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response contains token": true,
+				"Response contains email": true,
+				"Response time is less than 2000ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response contains token": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response contains email": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 2000ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				85
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response contains token": true,
+					"Response contains email": true,
+					"Response time is less than 2000ms": true
+				}
+			]
+		},
+		{
+			"id": "f0644caa-4216-4ddc-9cb3-e3c3e15dd73f",
+			"name": "POST Create Teacher",
+			"url": "http://localhost:8081/teachers",
+			"time": 6,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 201": false,
+				"Response contains created resource with id": false,
+				"Created teacher has correct name": false,
+				"Response time is less than 1000ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response contains created resource with id": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Created teacher has correct name": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response time is less than 1000ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				6
+			],
+			"allTests": [
+				{
+					"Status code is 201": false,
+					"Response contains created resource with id": false,
+					"Created teacher has correct name": false,
+					"Response time is less than 1000ms": true
+				}
+			]
+		},
+		{
+			"id": "2204591b-62f9-4ca7-97c3-935942556d98",
+			"name": "POST Create Subject",
+			"url": "http://localhost:8081/subjects",
+			"time": 5,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 201": false,
+				"Response contains created resource with id": false,
+				"Created subject has correct name": false,
+				"Response time is less than 1000ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response contains created resource with id": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Created subject has correct name": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response time is less than 1000ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code is 201": false,
+					"Response contains created resource with id": false,
+					"Created subject has correct name": false,
+					"Response time is less than 1000ms": true
+				}
+			]
+		},
+		{
+			"id": "1dde37ed-e53b-48c2-806a-58d94f6001e7",
+			"name": "POST Create Department",
+			"url": "http://localhost:8081/departments",
+			"time": 23,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201": true,
+				"Response contains created resource with id": true,
+				"Created department has correct name": true,
+				"Response time is less than 1000ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response contains created resource with id": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Created department has correct name": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 1000ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"Status code is 201": true,
+					"Response contains created resource with id": true,
+					"Created department has correct name": true,
+					"Response time is less than 1000ms": true
+				}
+			]
+		},
+		{
+			"id": "58147edc-36ba-4f7a-bdeb-b0ca67a09574",
+			"name": "GET All Teachers",
+			"url": "http://localhost:8081/teachers",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 200": false,
+				"Response is an array": false,
+				"Response time is less than 500ms": true,
+				"Each item has required fields": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response is an array": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Each item has required fields": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Status code is 200": false,
+					"Response is an array": false,
+					"Response time is less than 500ms": true,
+					"Each item has required fields": true
+				}
+			]
+		},
+		{
+			"id": "4486b7a9-08cd-4226-84a3-5ebc4cca388f",
+			"name": "GET All Subjects",
+			"url": "http://localhost:8081/subjects",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 200": false,
+				"Response is an array": false,
+				"Response time is less than 500ms": true,
+				"Each item has required fields": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response is an array": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Each item has required fields": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Status code is 200": false,
+					"Response is an array": false,
+					"Response time is less than 500ms": true,
+					"Each item has required fields": true
+				}
+			]
+		},
+		{
+			"id": "76cde5b7-f1c2-4025-bbb5-f68b477303e6",
+			"name": "GET All Departments",
+			"url": "http://localhost:8081/departments",
+			"time": 27,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response is an array": true,
+				"Response time is less than 500ms": true,
+				"Each item has required fields": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response is an array": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Each item has required fields": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				27
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response is an array": true,
+					"Response time is less than 500ms": true,
+					"Each item has required fields": true
+				}
+			]
+		},
+		{
+			"id": "43012777-080f-4d3b-9fd5-5d3b3464216c",
+			"name": "GET Department by ID",
+			"url": "http://localhost:8081/departments/17",
+			"time": 7,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 200": false,
+				"Returns correct resource": false,
+				"Response has required fields": false,
+				"Response time is less than 500ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Returns correct resource": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response has required fields": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status code is 200": false,
+					"Returns correct resource": false,
+					"Response has required fields": false,
+					"Response time is less than 500ms": true
+				}
+			]
+		},
+		{
+			"id": "f8ffaf95-e043-41ac-8db7-4dd47c9d35cd",
+			"name": "PUT Update Department",
+			"url": "http://localhost:8081/departments",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response contains updated resource": true,
+				"Department name was updated": true,
+				"Response time is less than 1000ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response contains updated resource": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Department name was updated": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 1000ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response contains updated resource": true,
+					"Department name was updated": true,
+					"Response time is less than 1000ms": true
+				}
+			]
+		},
+		{
+			"id": "d690b369-dbe6-4137-895d-4c14014db3e6",
+			"name": "DELETE Department",
+			"url": "http://localhost:8081/departments/17",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 200 or 204": false,
+				"Response time is less than 1000ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 or 204": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response time is less than 1000ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Status code is 200 or 204": false,
+					"Response time is less than 1000ms": true
+				}
+			]
+		},
+		{
+			"id": "81578642-b923-404f-96f4-8caf0e93f9f7",
+			"name": "GET Non-existing Teacher (404)",
+			"url": "http://localhost:8081/teachers/999999",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 404": false,
+				"Response contains error message": true,
+				"Response time is less than 500ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response contains error message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Status code is 404": false,
+					"Response contains error message": true,
+					"Response time is less than 500ms": true
+				}
+			]
+		},
+		{
+			"id": "40312587-5d97-4c78-b76d-1fbfdd6ceacd",
+			"name": "GET Non-existing Subject (404)",
+			"url": "http://localhost:8081/subjects/999999",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 404": false,
+				"Response contains error message": true,
+				"Response time is less than 500ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response contains error message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Status code is 404": false,
+					"Response contains error message": true,
+					"Response time is less than 500ms": true
+				}
+			]
+		},
+		{
+			"id": "2e4b870d-d49a-496b-a1f2-90777a77115a",
+			"name": "GET Non-existing Department (404)",
+			"url": "http://localhost:8081/departments/999999",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 404": false,
+				"Response contains error message": true,
+				"Response time is less than 500ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response contains error message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Status code is 404": false,
+					"Response contains error message": true,
+					"Response time is less than 500ms": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 192,
+	"collection": {
+		"requests": [
+			{
+				"id": "202290ad-db51-472a-9414-ebb87e8fa5e4",
+				"method": "POST"
+			},
+			{
+				"id": "f0644caa-4216-4ddc-9cb3-e3c3e15dd73f",
+				"method": "POST"
+			},
+			{
+				"id": "2204591b-62f9-4ca7-97c3-935942556d98",
+				"method": "POST"
+			},
+			{
+				"id": "1dde37ed-e53b-48c2-806a-58d94f6001e7",
+				"method": "POST"
+			},
+			{
+				"id": "58147edc-36ba-4f7a-bdeb-b0ca67a09574",
+				"method": "GET"
+			},
+			{
+				"id": "b342d9d4-3ffe-4b8e-bbec-00b764f770b1",
+				"method": "GET"
+			},
+			{
+				"id": "dc0e4f88-88c4-4f86-9bd1-2907c85637e7",
+				"method": "GET"
+			},
+			{
+				"id": "4486b7a9-08cd-4226-84a3-5ebc4cca388f",
+				"method": "GET"
+			},
+			{
+				"id": "76cde5b7-f1c2-4025-bbb5-f68b477303e6",
+				"method": "GET"
+			},
+			{
+				"id": "43012777-080f-4d3b-9fd5-5d3b3464216c",
+				"method": "GET"
+			},
+			{
+				"id": "13cab5fd-dff9-42c7-9f4d-0c9299eb200f",
+				"method": "PUT"
+			},
+			{
+				"id": "5ffcf6dc-0451-4251-a201-6e5c4a6f908c",
+				"method": "PUT"
+			},
+			{
+				"id": "f8ffaf95-e043-41ac-8db7-4dd47c9d35cd",
+				"method": "PUT"
+			},
+			{
+				"id": "34348107-dae4-454d-a202-e0fd381d653e",
+				"method": "DELETE"
+			},
+			{
+				"id": "68f7fbd5-3ae8-4b6c-87a6-69252bd84d2e",
+				"method": "DELETE"
+			},
+			{
+				"id": "d690b369-dbe6-4137-895d-4c14014db3e6",
+				"method": "DELETE"
+			},
+			{
+				"id": "81578642-b923-404f-96f4-8caf0e93f9f7",
+				"method": "GET"
+			},
+			{
+				"id": "40312587-5d97-4c78-b76d-1fbfdd6ceacd",
+				"method": "GET"
+			},
+			{
+				"id": "2e4b870d-d49a-496b-a1f2-90777a77115a",
+				"method": "GET"
+			}
+		]
+	}
+}
