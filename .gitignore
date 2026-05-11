@@ -7,7 +7,6 @@
 .env
 /schedule_logs
 **/.DS_Store
-**/reports
 
 # Python
 __pycache__/
