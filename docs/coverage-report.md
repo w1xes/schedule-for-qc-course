@@ -71,5 +71,3 @@
 > ./gradlew test jacocoTestReport
 > # Звіт: build/reports/jacoco/test/html/index.html
 > ```
-
-![Coverage Report — placeholder](../docs/coverage-screenshot.png)
