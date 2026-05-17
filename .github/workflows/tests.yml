@@ -145,16 +145,23 @@ jobs:
       - name: Start backend
         run: |
           java -jar backend-jar/*.jar &
-          echo "Waiting for backend on port 8081..."
-          for i in $(seq 1 60); do
-            CODE=$(curl -o /dev/null -s -w "%{http_code}" --max-time 3 http://localhost:8081 || true)
-            if [ "$CODE" != "000" ] && [ -n "$CODE" ]; then
-              echo "Backend is up (HTTP $CODE)"
+          echo "Waiting for backend (auth endpoint + Liquibase)..."
+          for i in $(seq 1 90); do
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}" --max-time 5 \
+              -X POST http://localhost:8081/auth/sign-in \
+              -H "Content-Type: application/json" \
+              -d '{"email":"manager@gmail.com","password":"Qwerty!123"}' 2>/dev/null || true)
+            echo "Attempt $i/90 — HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Backend fully ready and credentials valid."
               break
             fi
-            echo "Attempt $i/60 — not ready yet, waiting 5s..."
             sleep 5
           done
+          if [ "$STATUS" != "200" ]; then
+            echo "Backend did not become ready within 450s — aborting."
+            exit 1
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -234,16 +241,23 @@ jobs:
       - name: Start backend
         run: |
           java -jar backend-jar/*.jar &
-          echo "Waiting for backend on port 8081..."
-          for i in $(seq 1 60); do
-            CODE=$(curl -o /dev/null -s -w "%{http_code}" --max-time 3 http://localhost:8081 || true)
-            if [ "$CODE" != "000" ] && [ -n "$CODE" ]; then
-              echo "Backend is up (HTTP $CODE)"
+          echo "Waiting for backend (auth endpoint + Liquibase)..."
+          for i in $(seq 1 90); do
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}" --max-time 5 \
+              -X POST http://localhost:8081/auth/sign-in \
+              -H "Content-Type: application/json" \
+              -d '{"email":"manager@gmail.com","password":"Qwerty!123"}' 2>/dev/null || true)
+            echo "Attempt $i/90 — HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Backend fully ready and credentials valid."
               break
             fi
-            echo "Attempt $i/60 — not ready yet, waiting 5s..."
             sleep 5
           done
+          if [ "$STATUS" != "200" ]; then
+            echo "Backend did not become ready within 450s — aborting."
+            exit 1
+          fi
 
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
