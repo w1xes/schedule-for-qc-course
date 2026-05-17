@@ -1,5 +1,7 @@
 # Class Schedule
 
+![Tests](https://github.com/w1xes/schedule-testing/actions/workflows/tests.yml/badge.svg)
+
 ## General info
 
 This repository contains the source code of the Class Schedule Project.
