@@ -97,30 +97,25 @@ jobs:
       - name: Start services via Docker Compose
         run: docker compose -f docker-compose.yaml -f docker-compose.ci.yml up -d --build
 
-      - name: Wait for app to be ready
+      - name: Wait for app to be ready (and warm up JVM)
         run: |
-          echo "Waiting for app to start..."
-          for i in $(seq 1 30); do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/ 2>/dev/null || echo "000")
-            if [ "$STATUS" != "000" ]; then
-              echo "App is ready (HTTP $STATUS)"
+          echo "Waiting for app to accept sign-in requests..."
+          for i in $(seq 1 40); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
+              -X POST http://localhost:8081/auth/sign-in \
+              -H "Content-Type: application/json" \
+              -d '{"email":"manager@gmail.com","password":"Qwerty!123"}' \
+              2>/dev/null || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "App ready and JVM warmed up — sign-in returned 200 (attempt $i)"
               exit 0
             fi
-            echo "Attempt $i/30 — waiting 10s..."
+            echo "Attempt $i/40: sign-in status=$STATUS, waiting 10s..."
             sleep 10
           done
-          echo "App failed to start after 5 minutes"
-          docker compose logs app
+          echo "App failed to become ready after ~7 minutes"
+          docker compose -f docker-compose.yaml -f docker-compose.ci.yml logs --tail=60 app
           exit 1
-
-      - name: Warm up JVM before tests
-        run: |
-          echo "Sending a warm-up sign-in request to prime the JVM/BCrypt..."
-          curl -s -X POST http://localhost:8081/auth/sign-in \
-            -H "Content-Type: application/json" \
-            -d '{"email":"manager@gmail.com","password":"Qwerty!123"}' \
-            -o /dev/null || true
-          sleep 2
 
       - name: Install Newman
         run: npm install -g newman newman-reporter-htmlextra
