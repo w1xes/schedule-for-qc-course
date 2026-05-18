@@ -130,7 +130,7 @@ jobs:
           newman run \
             "schedule-testing/tests/api/postman/Schedule_API_Tests.postman_collection.json" \
             -e "schedule-testing/tests/api/postman/schedule-local.postman_environment.json" \
-            -r htmlextra \
+            -r cli,htmlextra \
             --reporter-htmlextra-export newman-report.html
 
       - name: Upload Newman report
