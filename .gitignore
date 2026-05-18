@@ -1,7 +1,6 @@
 /build
 /.gradle
 /.idea
-/gradle
 /backup
 /src/main/resources/application-local.yaml
 .env
