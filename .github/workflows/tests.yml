@@ -113,6 +113,15 @@ jobs:
           docker compose logs app
           exit 1
 
+      - name: Warm up JVM before tests
+        run: |
+          echo "Sending a warm-up sign-in request to prime the JVM/BCrypt..."
+          curl -s -X POST http://localhost:8081/auth/sign-in \
+            -H "Content-Type: application/json" \
+            -d '{"email":"manager@gmail.com","password":"Qwerty!123"}' \
+            -o /dev/null || true
+          sleep 2
+
       - name: Install Newman
         run: npm install -g newman newman-reporter-htmlextra
 
@@ -123,7 +132,6 @@ jobs:
             -e "schedule-testing/tests/api/postman/schedule-local.postman_environment.json" \
             -r htmlextra \
             --reporter-htmlextra-export newman-report.html
-        continue-on-error: true
 
       - name: Upload Newman report
         if: always()
@@ -131,6 +139,7 @@ jobs:
         with:
           name: api-test-report
           path: newman-report.html
+          if-no-files-found: warn
           retention-days: 7
 
       - name: Stop services
@@ -221,6 +230,7 @@ jobs:
         with:
           name: e2e-report-python-${{ matrix.python-version }}
           path: e2e-report-py${{ matrix.python-version }}.html
+          if-no-files-found: warn
           retention-days: 7
 
       - name: Stop services
