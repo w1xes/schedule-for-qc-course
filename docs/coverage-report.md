@@ -71,3 +71,7 @@
 > ./gradlew test jacocoTestReport
 > # Звіт: build/reports/jacoco/test/html/index.html
 > ```
+## Результати Mutation Testing
+
+![alt text](image-1.png)
+![alt text](image.png)

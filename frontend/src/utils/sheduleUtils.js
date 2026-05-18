@@ -1,6 +1,6 @@
 import {isEmpty} from 'lodash';
 
-const getScheduleByType = (entityId, semesterId) => ({});
+const getScheduleByType = () => undefined;
 
 const isNotReadySchedule = (schedule, loading) => isEmpty(schedule) && !loading;
 
