@@ -1,0 +1,14 @@
+# CI override for docker-compose.yaml.
+# Provides concrete values for variables that use non-standard names
+# (e.g. JWT_SECRET, OAuth2 placeholders) so the app starts cleanly in CI.
+# Usage: docker compose -f docker-compose.yaml -f docker-compose.ci.yml up -d
+services:
+  app:
+    environment:
+      JWT_SECRET: "ci-test-jwt-secret-at-least-256-bits-long-for-github-actions-only"
+      GOOGLE_CLIENT_ID: "disabled"
+      GOOGLE_CLIENT_SECRET: "disabled"
+      FACEBOOK_CLIENT_ID: "disabled"
+      FACEBOOK_CLIENT_SECRET: "disabled"
+      MAIL_USERNAME: ""
+      MAIL_PASSWORD: ""
