@@ -55,7 +55,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew test --rerun-tasks
         env:
           # OAuth2 client IDs must be present even for tests; dummy values are fine
           # because CacheConfiguration and OAuth2 flows are disabled in the test profile

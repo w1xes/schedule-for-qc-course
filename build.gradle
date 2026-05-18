@@ -58,6 +58,10 @@ test {
     useJUnitPlatform()
     maxHeapSize = '1G'
     finalizedBy jacocoTestReport
+    testLogging {
+        events 'passed', 'failed', 'skipped'
+        showStandardStreams false
+    }
 }
 
 // ==================== JACOCO ====================
