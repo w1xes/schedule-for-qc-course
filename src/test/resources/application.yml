@@ -3,9 +3,9 @@ spring:
     enabled: false
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/schedule_test
-    username: postgres
-    password: root
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/schedule_test}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
     driver-class-name: org.postgresql.Driver
 
     hikari:
